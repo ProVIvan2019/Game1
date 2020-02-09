@@ -4,22 +4,19 @@ level = [
     '----------------------------------------------------------------------------------------------------------------------------------',
     '-                                                                                                                                -',
     '-                                                                                                                                -',
-    '-                                                       --                                                                       -',
+    '-                                                       --                  ---                      ---              ---        -',
     '-                      --                                                                                                        -',
     '-                                                                                                                                -',
-    '-                                                                                                                                -',
+    '-                                ----                                                          ---                 ---           -',
     '-                   --                        --                      --                                                         -',
-    '-         --                                                                                                                     -',
-    '-                                        --             --                                                                       -',
-    '-                                                                                                                                -',
-    '-                    ---                                                                                                         -',
-    '-                                                                                                                                -',
-    '-                                                                                                                                -',
-    '-                                --                      --                                                                      -',
-    '-                                                                                                                                -',
-    '-                                                      --                                                                        -',
-    '-                                                                                                                                -',
-    '-                                                                                                                                -',
+    '-         --                                                                         ---                          --             -',
+    '-                                        --             --                                            --                         -',
+    '-                                                           --                       --                               --         -',
+    '-                    ---                                                         --                                 --           -',
+    '-                                               ---                                                ---                           -',
+    '-                                                                        --         ---                                          -',
+    '-                                                      --                                                       --    --         -',
+    '-                --                         --                                                                                   -',
     '-                                                                                                                                -',
     '----------------------------------------------------------------------------------------------------------------------------------'
 ]
@@ -32,7 +29,7 @@ BRICK_COLOR_2 = (255, 128, 0)
 FPS = 60
 clock = pygame.time.Clock()
 PLAYER_SIZE = 40
-BG_SPEED = 30
+BG_SPEED = 0.3
 dx = 0
 PLAYER_SPEED = 3
 penalty = 0.0
@@ -74,6 +71,16 @@ while run:
     for e in pygame.event.get():
         if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             run = False
+        elif e.type == pygame.MOUSEBUTTONDOWN:
+            if e.button == 1:
+                mouse_pos = pygame.mouse.get_pos()
+                if (
+                    mouse_pos[0] >= (WIN_WIDTH - BTN_W) // 2
+                    and mouse_pos[0] <= (WIN_WIDTH + BTN_W) // 2
+                    and mouse_pos[1] >= WIN_HEIGHT // 2
+                    and mouse_pos[1] <= WIN_HEIGHT // 2 + BTN_H
+                ):
+                    print('!!!!!!!!!!!', end=' ')
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_RIGHT]:
@@ -104,10 +111,11 @@ while run:
                 brick = pygame.draw.rect(screen, BRICK_COLOR, [x, y, BRICK_WIDTH, BRICK_HEIGHT])
                 pygame.draw.rect(screen, BRICK_COLOR_2, [x, y, BRICK_WIDTH, BRICK_HEIGHT], 2)
                 if brick.colliderect(player_rect):
-                    if color == BLUE:
-                        color = RED
-                    face(color)
-                    penalty += 0.1
+                    if player_rect.x < WIN_WIDTH - PLAYER_SIZE * 2:
+                        if color == BLUE:
+                            color = RED
+                        face(color)
+                        penalty += 0.1
             x += BRICK_WIDTH
         y += BRICK_HEIGHT
         x = dx
